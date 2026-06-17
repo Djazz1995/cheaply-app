@@ -142,6 +142,7 @@ Layered service-based architecture per `AGENTS.md` §15. Build bottom-up: `model
 - Init Expo (managed) + TypeScript. Read https://docs.expo.dev/versions/v54.0.0/ first.
 - Share types from `src/payload-types.ts` (shared client types package or copy generated types) — avoid drift.
 - Navigation: Expo Router (file-based, matches Next mental model).
+- **UI: gluestack-ui v3** (current stable; copy-paste components owned in-repo) + **NativeWind** (Tailwind for RN) as styling base. Components live only in `screens`/components — orthogonal to `services`/`hooks`/`lib`. v2 = legacy; v5 = alpha (skip). Verify gluestack v3 + NativeWind versions against Expo SDK 54 before install (v3 announced on SDK 53 — confirm 54 compat).
 - Data: TanStack Query + typed API client over `/api/app/v1`. State: small auth/location store (Zustand).
 - Folder skeleton: `src/{models,services,hooks,lib,screens}`. Path aliases (`@/models`…). Lint convention: screens import `models` + `hooks` only.
 - i18n: reuse `messages/en.json` + `messages/nl.json` (next-intl → i18next/expo-localization). nl/en parity.

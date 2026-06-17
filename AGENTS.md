@@ -20,6 +20,7 @@ Read the exact versioned docs at https://docs.expo.dev/versions/v54.0.0/ before 
 - **Home = categorized overview, not one mixed feed.** `HomeService.getHome` returns preview rows per type (deals/products/reels/events/businesses); each "See all" → a **dedicated page** backed by its own service (`DealService`, `ProductService`, `BusinessService.discover`, `EventService` P2, `ReelService` P3) with its own filters/sort + pagination. Discover (`SearchService`) = query-driven, separate from browse.
 - **Tokens in secure-store only** (Keychain/Keystore via `expo-secure-store`) — never AsyncStorage.
 - **Instrument outbound actions** (directions/call/visit) from day one — core success metric (PRD §11).
+- **UI = gluestack-ui v3 + NativeWind.** Current stable (v2 legacy, v5 alpha — skip). Copy-paste components (owned in-repo), Tailwind-style classes. UI lives only in `screens`/components — never import UI into `services`/`hooks`/`lib`. Check versions against Expo SDK 54 before adding.
 - **TypeScript everywhere.** Strict types; no `any` without reason.
 - **Reference the PRD by section** (e.g. PRD 6.1) — the architecture tables map models/services to PRD sections.
 
