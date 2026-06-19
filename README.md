@@ -1,50 +1,36 @@
-# Welcome to your Expo app 👋
+# Cheaply — mobile app
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Local-business **and** online-webshop discovery/deals app. Expo (React Native), iOS + Android. Anonymous-first browse; follow/save/push behind a soft-gate. Reuses the existing Cheaply backend (Payload CMS + Postgres + Typesense) via a thin `/api/app/v1` layer.
 
-## Get started
+> **Agents:** read `AGENTS.md` first — it's the project's operating contract (architecture §15, build workflow §16). `CLAUDE.md` imports it.
 
-1. Install dependencies
+## Docs — start here
 
-   ```bash
-   npm install
-   ```
+Four altitudes, each cites the next. Build from the blueprint; it pulls the others.
 
-2. Start the app
+| Doc | Role | Read when |
+| --- | --- | --- |
+| [docs/prd-mobile-app.md](docs/prd-mobile-app.md) | **Why** — vision, positioning, surfaces, phasing | understanding the product |
+| [docs/build-plan-mobile-app.md](docs/build-plan-mobile-app.md) | **What** — reference spec (collections, endpoints, auth §4a, ranking) | you need detail behind a task |
+| [docs/build-blueprint.md](docs/build-blueprint.md) | **How / order** — tasks (T1–T47), screens (S1–S9), security gates | deciding what to build next |
+| [docs/build-workflow.md](docs/build-workflow.md) | **Procedure** — the per-screen/feature loop to follow | actually building |
+| [docs/od-design-workflow.md](docs/od-design-workflow.md) | **Design** — Open Design wiring + `start_run` recipe | designing a screen |
 
-   ```bash
-   npx expo start
-   ```
+Flow: `PRD → build-plan → blueprint → build-workflow`, all bound by `AGENTS.md` §15 (layers) + §16 (workflow), with security skills (`security-guidance` auto, `owasp-security`, `/security-review`) and Open Design.
 
-In the output, you'll find options to open the app in a
+## Stack
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Expo SDK 54 + Expo Router · gluestack-ui v3 + NativeWind · TanStack Query + Zustand · layered `screens → hooks → services → lib` (see `AGENTS.md` §15).
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Status
 
-## Get a fresh project
+Planning + design setup complete. App not yet scaffolded — first build task is blueprint **T1** (Expo init). Verify Expo APIs against https://docs.expo.dev/versions/v54.0.0/ before coding.
 
-When you're ready, run:
+## Get started (once scaffolded)
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Open on an [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/), [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/), or [Expo Go](https://expo.dev/go).

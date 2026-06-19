@@ -22,7 +22,7 @@ Status: Draft · Date: 2026-06-19
 - Screens reference tasks as `→ T44`.
 
 ### Open decisions (resolve before the tasks they block)
-- [ ] **Brand color.** gluestack v3 + NativeWind locked; primary hue TBD. Mock default = teal (`#0F6E56`/`#9FE1CB`). Blocks: T3 theme tokens, all Track-B design steps. _Run `impeccable` to lock a palette before T44._
+- [ ] **Brand color.** gluestack v3 + NativeWind locked; primary hue **deliberately deferred**. Screens designed in Open Design on `<DS>` (generated from the gluestack Figma) using its default tokens. Recolor later = single `<DS>` primary-token swap → recolors all screens; NOT a per-screen redo. Keep everything tokenized (no hardcoded colors) so the swap stays clean. Blocks nothing now; revisit before final polish / T3 theme lock.
 - [ ] **App API hosting** — same Vercel deploy vs split service (build-plan §6.4). Blocks: T5 base URL/env.
 - [ ] **AnalyticsService sink** — lightweight `AppEvents` collection vs external analytics (build-plan §2.7). Blocks: T33.
 - [ ] **Apple/Google client ids** — provisioning before T17/T37/T38.
@@ -102,70 +102,70 @@ Surfaces: Home + dedicated pages, Map, Discover, Business profile, Saved/Followi
 
 ## Track B — Phase 1 screens
 
-> Each: purpose → hooks/services → components (gluestack v3) → states → design step → security → build tasks. Design step for every screen: **(1) `impeccable` pass** (hierarchy, spacing, motion, copy), **(2) Claude Design mockup**, **(3) record reused tokens/components**.
+> Each block = the screen spec: purpose → hooks/services → components (gluestack v3) → states → security → build tasks. **The design + build *procedure* lives in `docs/build-workflow.md`** (Open Design → user verifies → RN build). Don't restate it per screen — these blocks are the *what*, build-workflow is the *how*.
 
 ### S1 — Onboarding / location · PRD §6.1, build-plan §3.6
 - Hooks: `useLocation`, `useUser`. Services: device location, postcode→geo (reuse backend lookup).
 - Components: `Box`, `Input` (postcode), `Button`, permission sheet.
 - States: permission-denied (manual postcode), geocode-fail, anonymous (default — no sign-in here).
 - 🔒 Sec/privacy: location consent prompt; store home geo on device + `/me` only after auth; nothing requires account.
-- Build: → T8, T28 (`useLocation`), T35 (perms). Design: impeccable + mockup.
+- Build: → T8, T28 (`useLocation`), T35 (perms). Design: OD per build-workflow.
 
 ### S2 — Home (categorized overview) · PRD §6.1
 - Hooks: `useHome`. Service: `HomeService`.
 - Components: location header, search entry, scope chips (All/Local/Online), section rows (`HomeSection`) of `CardItem` (Deal/Product/Business cards), bottom tab bar.
 - States: loading (skeleton rows), empty (hide section), error (retry), offline (cached home), anon (location+online) vs authed (follow-personalized).
 - 🔒 Sec: anonymous-safe; no auth-only data; follow CTA → soft-gate (S9).
-- Build: → T24, T28, T44-equiv (this screen). Design: impeccable + mockup (✅ first pass done).
+- Build: → T24, T28 (this screen). Design: OD per build-workflow (an early inline mockup exists as reference).
 
 ### S3 — Dedicated pages: Deals / Products / Businesses · PRD §6.1a
 - Hooks: `useDeals` / `useProducts` / `useBusinesses`. Services: Deal/Product/Business.
 - Components: filter/sort bar, infinite list/grid, card, scope filter.
 - States: loading (skeleton), empty ("no results, widen filters"), error, end-of-list, offline.
 - 🔒 Sec: read-only, anonymous-safe; param validation server-side (T22).
-- Build: → T25, T26, T28. Design: impeccable + mockup per page (shared card components).
+- Build: → T25, T26, T28. Design: OD per build-workflow (reuse shared card components).
 
 ### S4 — Map · PRD §6.2
 - Hooks: `useMap`, `useLocation`. Service: `MapService`.
 - Components: map (react-native-maps), clustered pins, filter bar, tap → preview card → profile.
 - States: loading pins, empty viewport, location-denied (default region), error, offline.
 - 🔒 Sec: local/hybrid only (online excluded server-side); no precise-location upload beyond viewport query.
-- Build: → T27, T28. Design: impeccable + mockup.
+- Build: → T27, T28. Design: OD per build-workflow.
 
 ### S5 — Discover / search · PRD §6.3
 - Hooks: `useSearch`. Service: `SearchService`.
 - Components: search input, typed result rows (business/deal/product), category hubs → dedicated page (filtered), scope filter.
 - States: idle (categories), loading, no-results, error, offline.
 - 🔒 Sec: query sanitized + length-capped server-side; anonymous-safe.
-- Build: → T27, T28. Design: impeccable + mockup.
+- Build: → T27, T28. Design: OD per build-workflow.
 
 ### S6 — Business profile (local + online variants) · PRD §6.4
 - Hooks: `useBusiness(slug)`, `useFollow`. Services: `BusinessService`, `FollowService`, `AnalyticsService`.
 - Components: header (logo, follow btn, follower count), tabs (deals/products + locations/about for local/hybrid), action bar — **local/hybrid:** Directions/Call/Visit/Follow; **online:** Visit shop/Follow.
 - States: loading, not-found, no-offers (still followable), error, offline; follow btn anon → soft-gate.
 - 🔒 Sec/privacy: outbound actions (`track`) carry no PII; follow gated; Directions/Call open native intents (validate URLs/tel).
-- Build: → T26, T30, T31, T32. Design: impeccable + **two mockups** (local, online).
+- Build: → T26, T30, T31, T32. Design: OD per build-workflow — **two variants** (local, online).
 
 ### S7 — Saved & Following · PRD §6.6
 - Hooks: `useSaved`, `useFollowing`. Services: Save/Follow.
 - Components: tabbed lists, card, empty CTA → Discover.
 - States: loading, empty (anon → soft-gate prompt + value pitch), error, offline.
 - 🔒 Sec: auth-required; never render another user's data; 401 → re-auth.
-- Build: → T30, T31. Design: impeccable + mockup.
+- Build: → T30, T31. Design: OD per build-workflow.
 
 ### S8 — Profile / Settings · PRD §6.7
 - Hooks: `useUser`, `useAuth`, `usePush`. Service: `UserService`.
 - Components: location editor, notification prefs (frequency, quiet hours), sign-in/out, GDPR (export/delete), locale toggle.
 - States: anon (sign-in CTA) vs authed (full), saving, error.
 - 🔒 Sec: GDPR export/delete (T34); sign-out clears secureStore + revokes; prefs validated.
-- Build: → T20, T21, T34, T35. Design: impeccable + mockup.
+- Build: → T20, T21, T34, T35. Design: OD per build-workflow.
 
 ### S9 — Auth soft-gate modal · build-plan §4a
 - Hooks: `useAuth`. Service: `AuthService`.
 - Components: modal, email input, 6-digit code input, Apple/Google buttons, resend (rate-aware).
 - States: email-entry, code-sent, verifying, error (invalid/expired/locked-out), success → resume gated action.
 - 🔒 Sec: no enumeration (generic copy), resend rate-limited UI, code masked, tokens → secureStore, never log code/email. Threat: enumeration + brute-force surfaced in UX.
-- Build: → T19, T21. Design: impeccable + mockup.
+- Build: → T19, T21. Design: OD per build-workflow.
 
 ---
 
@@ -198,14 +198,14 @@ Build on Phase 1 patterns. New: business accounts, claim flow, manual CRUD, even
 - [ ] **T40 — BE: `Events` + `Collections` collections + `/events`, `/collections` endpoints.**
 - [ ] **T41 — BE: business self-serve CRUD (products/deals/events), Shopify connect (OAuth), stats (`AppEvents`).** 🔒 Sec: OAuth state/PKCE; scope-limited tokens; tenant isolation on every write. (A01)
 - [ ] **T42 — FE: `EventService`, `CollectionService` + `useEvents`, `useCollections`.**
-- [ ] **T43 — FE: Events page + Collections in Discover (Track B).** Design: impeccable + mockups.
+- [ ] **T43 — FE: Events page + Collections in Discover (Track B).** Design: OD per build-workflow.
 - [ ] **T44 — FE: business-mode screens** (manage profile, CRUD, Shopify connect, stats). 🔒 Sec: role-gated UI; never expose other tenants' data.
 - [ ] **🔒 Phase 2 security gate** — multi-tenant authZ (no cross-tenant read/write), OAuth hardening, claim-flow abuse, business-account rate limits, `/security-review`.
 
 # PHASE 3 — Reels + monetization (lighter)
 
 - [ ] **T45 — BE: video upload → storage + transcode (Mux/Cloudflare Stream) + CDN; `Reels.status` moderation gate before publish.** 🔒 Sec: signed upload URLs; content moderation; MIME/size validation.
-- [ ] **T46 — FE: `ReelService` + `useReels` + Reels page (vertical player, `expo-av`).** Design: impeccable + mockup.
+- [ ] **T46 — FE: `ReelService` + `useReels` + Reels page (vertical player, `expo-av`).** Design: OD per build-workflow.
 - [ ] **T47 — Monetization: boosted/featured placement (paid), priority ranking.** 🔒 Sec: payment provider PCI offload (no card data in app); server-side entitlement checks.
 - [ ] **🔒 Phase 3 security gate** — upload abuse, moderation bypass, media access control, billing/entitlement integrity, `/security-review`.
 
@@ -218,12 +218,12 @@ Build on Phase 1 patterns. New: business accounts, claim flow, manual CRUD, even
 - Layered architecture lint passes; UI confined to `screens`; no service bypasses `apiClient`.
 - Anonymous browse works with zero account; follow/save/push gated.
 - Shipped to TestFlight + Play internal in Leiden with GDPR disclosures.
-- Each screen has an `impeccable`-reviewed Claude Design mockup; tokens consistent across screens.
+- Each screen has a user-verified Open Design artifact; tokens consistent across screens (single gluestack DS).
 
 ## Start here — first 5 tasks
 1. **T1** — Expo init + Router.
 2. **T2** — Folder skeleton + import-boundary lint (locks the architecture early).
-3. **T3** — gluestack v3 + NativeWind + brand tokens (resolve Open:brand via `impeccable` first).
+3. **T3** — gluestack v3 + NativeWind + tokens from the OD-extracted gluestack DS (brand color deferred — gluestack defaults, see Open decisions).
 4. **T5 + T6** — `apiClient` + `secureStore` (the two lib spines everything else rides on).
 5. **T8** — Author all Phase-1 models (unblocks every service).
 

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "open-design": {
+      "command": "node",
+      "args": [
+        "/Users/d.vanderhoogt/Desktop/Personal/open-design/apps/daemon/bin/od.mjs",
+        "mcp"
+      ]
+    }
+  }
+}

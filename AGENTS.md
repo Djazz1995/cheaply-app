@@ -28,6 +28,7 @@ Read the exact versioned docs at https://docs.expo.dev/versions/v54.0.0/ before 
 
 - PRD → `docs/prd-mobile-app.md` (app; positioning + web/discovery context folded into §1a)
 - Execution checklist → `docs/build-blueprint.md` (ordered how: tasks, DoD, security gates, screens) — build from this
+- Build workflow → `docs/build-workflow.md` (the per-screen/feature procedure to follow) + `docs/od-design-workflow.md` (Open Design wiring + recipe)
 - Reference spec → `docs/build-plan-mobile-app.md` (detailed what: collections, endpoints, auth §4a, ranking)
 - Architecture → this file, Section 15.
 
@@ -122,11 +123,13 @@ Phase 2 adds `EventService`/business-mode services; Phase 3 adds `ReelService` +
 
 ## 16. Build workflow (blueprint · design · security)
 
+**Follow `docs/build-workflow.md` for every screen and feature** — it's the canonical step-by-step procedure (foundation-first, build data spine before UI, OD design → user verifies → build RN UI → verify runs → security review → tick boxes → phase gate). Don't freelance around it.
+
 `docs/build-blueprint.md` is the execution order. Work tasks in id order, respect `Dep:`, tick the boxes (`[ ]→[~]→[x]`) as you go, and don't advance a phase until its **Security gate** is green.
 
 ### Design — every screen
-- Run the **`impeccable`** skill on each screen (hierarchy, spacing, motion, copy, states) before/with building it.
-- Produce a Claude Design mockup; record reused tokens/components so screens stay consistent (gluestack-ui v3 + NativeWind).
+- Design via **Open Design** on the extracted gluestack DS, then **the user verifies** before building — see `docs/build-workflow.md` §1 (the procedure) + `docs/od-design-workflow.md` (the recipe).
+- Record reused tokens/components so screens stay consistent (gluestack-ui v3 + NativeWind). `impeccable` is optional later for polish/critique (not required in the core loop).
 
 ### Security — built in, not bolted on
 - **`security-guidance`** (installed plugin) runs automatically — pattern warnings on edits, diff review on stop, commit reviewer. **Do not ignore its findings**; fix or justify in the task before moving on.
