@@ -27,7 +27,8 @@ Read the exact versioned docs at https://docs.expo.dev/versions/v54.0.0/ before 
 ## Docs
 
 - PRD → `docs/prd-mobile-app.md` (app; positioning + web/discovery context folded into §1a)
-- Build plan → `docs/build-plan-mobile-app.md` (full stack: backend + frontend)
+- Execution checklist → `docs/build-blueprint.md` (ordered how: tasks, DoD, security gates, screens) — build from this
+- Reference spec → `docs/build-plan-mobile-app.md` (detailed what: collections, endpoints, auth §4a, ranking)
 - Architecture → this file, Section 15.
 
 ---
@@ -116,3 +117,22 @@ All services call `/api/app/v1` via `lib/apiClient` (which injects auth + handle
 | `googleAuth.ts`    | Google sign-in                     | social login                                       |
 
 Phase 2 adds `EventService`/business-mode services; Phase 3 adds `ReelService` + video lib (`expo-av` / player). Keep `lib` swappable per the same pattern.
+
+---
+
+## 16. Build workflow (blueprint · design · security)
+
+`docs/build-blueprint.md` is the execution order. Work tasks in id order, respect `Dep:`, tick the boxes (`[ ]→[~]→[x]`) as you go, and don't advance a phase until its **Security gate** is green.
+
+### Design — every screen
+- Run the **`impeccable`** skill on each screen (hierarchy, spacing, motion, copy, states) before/with building it.
+- Produce a Claude Design mockup; record reused tokens/components so screens stay consistent (gluestack-ui v3 + NativeWind).
+
+### Security — built in, not bolted on
+- **`security-guidance`** (installed plugin) runs automatically — pattern warnings on edits, diff review on stop, commit reviewer. **Do not ignore its findings**; fix or justify in the task before moving on.
+- Lean on **`owasp-security`** knowledge when designing auth, data, and I/O tasks (OWASP Top 10:2025 / ASVS 5.0).
+- Run **`/security-review`** on the branch at every phase Security gate; gate must pass to advance.
+- Every task tagged `🔒 Sec` in the blueprint carries its acceptance criteria + the threat it mitigates — treat those as DoD, not suggestions.
+
+### Definition of done (per task)
+Code + states (loading/empty/error/offline, anon-vs-authed) + nl/en parity + the task's DoD and any `🔒 Sec` criteria. Layered-architecture lint (§15) stays green.

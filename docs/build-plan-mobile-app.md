@@ -1,10 +1,9 @@
 # Build Plan — Cheaply Mobile App (React Native)
 
-_Engineering plan for the app in `docs/prd-mobile-app.md`. Backend + frontend work, sequenced, grounded in the current repo._
+_**Reference spec** for the app: backend + frontend, exactly **what** to build (collections, endpoints, auth §4a, ranking, ingestion, decisions). Pairs with `docs/build-blueprint.md` — the **execution checklist** (the ordered **how**: tasks, DoD, security gates, screens). Build from the blueprint; consult this for the detail behind each task._
 
 Status: Draft
-Date: 2026-06-17
-Companion to: `docs/prd-mobile-app.md`
+Date: 2026-06-17 · Companion to: `docs/prd-mobile-app.md` (what/why), `docs/build-blueprint.md` (execution)
 
 ---
 
